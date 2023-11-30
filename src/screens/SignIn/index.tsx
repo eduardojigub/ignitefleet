@@ -1,13 +1,15 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 
+import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+
 import { Container, Title, Slogan } from './styles';
 
 import backgroundImg from '../../assets/background.png';
 import { Button } from '../../components/Button';
 
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from '@env';
-import { useEffect, useState } from 'react';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -31,7 +33,12 @@ export function SignIn() {
   useEffect(() => {
     if (response?.type === 'success') {
       if (response?.authentication?.idToken) {
-        console.log('token', response.authentication.idToken);
+      } else {
+        Alert.alert(
+          'Entrar',
+          'Não foi possível conectar-se com a sua conta Google'
+        );
+        setIsAuthenticating(false);
       }
     }
   }, [response]);
